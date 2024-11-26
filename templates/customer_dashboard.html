@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Market</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Available Crops</h2>
+    
+        <!-- Location Filter -->
+        <form method="GET" action="/customer_dashboard">
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <select class="form-select" name="location" onchange="this.form.submit()">
+                        <option value="">All Locations</option>
+                        {% for loc in locations %}
+                        <option value="{{ loc.id }}" {% if loc.id == selected_location %}selected{% endif %}>
+                            {{ loc.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
+    
+        <!-- Display Crops -->
+        <div class="row">
+            {% for crop in crops %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="/static/uploads/{{ crop.image }}" class="card-img-top" alt="{{ crop.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ crop.name }}</h5>
+                        <p class="card-text">
+                            <i class="bi bi-geo-alt"></i> {{ crop.location }}<br>
+                            <strong>₹{{ crop.price_per_kg }}/kg</strong><br>
+                            {% if crop.offer %}
+                            <span class="badge bg-success">Offer: {{ crop.offer_details }}</span>
+                            {% endif %}
+                        </p>
+                        <a href="/add_to_cart/{{ crop.id }}" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    </body>
+</html>
